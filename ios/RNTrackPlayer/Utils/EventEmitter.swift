@@ -11,6 +11,9 @@ class EventEmitter {
     }
 
     func emit(event: EventType, body: Any?) {
-        self.eventEmitter.sendEvent(withName: event.rawValue, body: body)
+        guard let emitter = self.eventEmitter, emitter.bridge != nil else {
+            return // bridge torn down or not yet attached — no listeners
+        }
+        emitter.sendEvent(withName: event.rawValue, body: body)
     }
 }
